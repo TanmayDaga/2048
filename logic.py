@@ -102,6 +102,6 @@ class Board:
         return None  # ie not win and not lose
 
     def check_all_filled(self):
-        if np.count_nonzero() != 16:
+        if np.count_nonzero(self.board) != 16:
             return False
         return True
