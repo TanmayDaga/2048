@@ -36,7 +36,6 @@ class Board:
                         self.board[x][y] *= 2
                         self.board[x][y + 1] = 0
                         change = True
-        return self.check_win_game_over(change)
 
     # generate free possibilities
     def empty_spaces(self):
@@ -66,6 +65,7 @@ class Board:
         val = self.compress()
         if val or val1:
             self.generate_random()
+        return list(filter(None, [val, val1]))
 
     def left_swipe(self):
         self.board = np.fliplr(self.board)
@@ -75,6 +75,7 @@ class Board:
         if val or val1:
             self.generate_random()
         self.board = np.fliplr(self.board)
+        return list(filter(None, [val, val1]))
 
     def up_swipe(self):
         self.board = np.fliplr(np.transpose(self.board))
@@ -84,6 +85,7 @@ class Board:
         if val or val1:
             self.generate_random()
         self.board = np.transpose(np.fliplr(self.board))
+        return list(filter(None, [val, val1]))
 
     def down_swipe(self):
         self.board = np.transpose(self.board)
@@ -93,15 +95,24 @@ class Board:
         if val or val1:
             self.generate_random()
         self.board = np.transpose(self.board)
+        return list(filter(None, [val, val1]))
 
     def check_win_game_over(self, compress_val):
-        if (not self.check_all_filled()) and (not compress_val):
-            return False  # ie loose
+        if (self.check_all_filled() is True) and (compress_val == []):
+            board = self.board
+            # checking if all the way it cannot move
+            if (self.right_swipe() == []) and (self.up_swipe() == []) and (self.down_swipe() == []) and (
+                    self.left_swipe() == []):
+                self.board = board
+                return False
+            self.board = board
+            return None
+
         if 2048 in self.board:
             return True  # ie win
         return None  # ie not win and not lose
 
     def check_all_filled(self):
-        if np.count_nonzero(self.board) != 16:
-            return False
-        return True
+        if np.count_nonzero(self.board) == 16:
+            return True
+        return False

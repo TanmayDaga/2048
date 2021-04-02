@@ -3,7 +3,7 @@ import sys
 
 from gui import Gui
 from logic import Board
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5 import Qt as forevent
 from PyQt5.QtCore import Qt
 import numpy
@@ -44,7 +44,6 @@ class ExtendedGui(Gui, Board):
         super().__init__()
         self.setupUI()
         # self.generate_random()
-        print(self.board)
         self.set_label_according_to_board()
 
     def set_label_according_to_board(self):
@@ -73,22 +72,31 @@ class ExtendedGui(Gui, Board):
                                           }}''')
 
     def keyPressEvent(self, a0: QtGui.QKeyEvent) -> None:
+        compress_val = None
         if (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Down):
-            self.down_swipe()
+            compress_val = self.down_swipe()
             self.set_label_according_to_board()
 
+
         if (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Up):
-            self.up_swipe()
+            compress_val = self.up_swipe()
             self.set_label_according_to_board()
 
         if (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Right):
-            self.right_swipe()
+            compress_val = self.right_swipe()
             self.set_label_according_to_board()
 
         if (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Left):
-            self.left_swipe()
+            compress_val = self.left_swipe()
             self.set_label_according_to_board()
+        if self.check_win_game_over(compress_val) == False:
 
+            loose_box = QtWidgets.QMessageBox()
+            loose_box.setText("You lost the game")
+            loose_box.setWindowTitle('You loose')
+            loose_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            loose_box.buttonClicked.connect(self.on_click_exit)
+            loose_box.exec_()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
