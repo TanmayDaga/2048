@@ -78,15 +78,15 @@ class ExtendedGui(Gui, Board):
             self.set_label_according_to_board()
 
 
-        if (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Up):
+        elif (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Up):
             compress_val = self.up_swipe()
             self.set_label_according_to_board()
 
-        if (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Right):
+        elif (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Right):
             compress_val = self.right_swipe()
             self.set_label_according_to_board()
 
-        if (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Left):
+        elif (a0.type() == forevent.QKeyEvent.KeyPress) and (a0.key() == Qt.Key_Left):
             compress_val = self.left_swipe()
             self.set_label_according_to_board()
         if self.check_win_game_over(compress_val) == False:
@@ -97,7 +97,13 @@ class ExtendedGui(Gui, Board):
             loose_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
             loose_box.buttonClicked.connect(self.on_click_exit)
             loose_box.exec_()
-
+        elif self.check_win_game_over(compress_val) == True:
+            win_box = QtWidgets.QMessageBox()
+            win_box.setText("You won the game")
+            win_box.setWindowTitle("You Won")
+            win_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            win_box.buttonClicked.connect(self.on_click_exit)
+            win_box.exec_()
 def main():
     app = QtWidgets.QApplication(sys.argv)
     ex = ExtendedGui()
